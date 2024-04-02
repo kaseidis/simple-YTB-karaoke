@@ -1,4 +1,6 @@
 # Simple YTB Karaoke System
+[简体中文](README_zh.md)
+
 Welcome to our Home Karaoke System, designed to bring the joy of karaoke into your home with ease. Powered by YouTube and a simple, interactive interface, you can queue up your favorite songs, manage playlists, and sing along with family and friends. Follow the instructions below to get started.
 
 ## Requirements
