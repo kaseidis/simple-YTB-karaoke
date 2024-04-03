@@ -19,6 +19,7 @@ videos = []
 # YouTube API Key placeholder
 API_KEY = ''
 
+# Hosting Port
 PORT = 8081
 
 # Determine local IP address
@@ -43,6 +44,11 @@ def get_video_title(vid):
         return video_info['items'][0]['snippet']['title']
     except:
         return "No Title Got"
+
+
+@app.get("/static/<filepath:re:.*\.png>")
+def css(filepath):
+    return static_file(filepath, root="static/")
 
 @app.get('/api/client_qr')
 def client_qr_code():
