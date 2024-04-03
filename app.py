@@ -74,12 +74,12 @@ def client_qr_code():
     return bytes_buffer.getvalue()
 
 @app.get('/')
-def serve_homepage():
+def serve_index():
     return static_file('index.htm', root='./static')
 
 
 @app.get('/client')
-def serve_homepage():
+def serve_client():
     return static_file('client.htm', root='./static')
 
 @app.post('/api/item/top')
@@ -128,12 +128,12 @@ def add_item():
 
 @app.get('/api/item')
 def get_item():
-    with lock:
-        if videos:
+    if videos:        
+        with lock:
             return videos.pop(0)
-        else:
-            response.status = 404
-            return {"error": "No videos available"}
+    else:
+        response.status = 404
+        return {"error": "No videos available"}
 
 @app.delete('/api/item')
 def delete_item():
@@ -163,4 +163,4 @@ application = default_app()
 # Run the Bottle web server
 if __name__ == '__main__':
     #run(app, host='0.0.0.0', port=PORT, debug=True, reloader=True)
-    run(app, host='0.0.0.0', port=PORT)
+    run(app, host='0.0.0.0', port=PORT, server='paste')
