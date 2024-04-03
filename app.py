@@ -4,6 +4,7 @@ import requests
 import json
 import socket
 import qrcode
+import os
 from io import BytesIO
 
 # Initialize the Bottle app
@@ -25,7 +26,10 @@ def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         # connect() doesn't send packets with UDP, so this is safe
-        s.connect(("8.8.8.8", 80))
+        if os.environ['TEST_IP']:
+            s.connect((os.environ['TEST_IP'], 80))
+        else:
+            s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
     finally:
         s.close()
@@ -60,7 +64,8 @@ def client_qr_code():
     
     # Save the QR code to a bytes buffer
     bytes_buffer = BytesIO()
-    img.save(bytes_buffer, format="PNG")
+    # img.save(bytes_buffer, format="PNG")
+    img.save(bytes_buffer) # For newer version of libs
     bytes_buffer.seek(0)
     
     # Set the proper content type
