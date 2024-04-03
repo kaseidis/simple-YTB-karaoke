@@ -27,7 +27,7 @@ def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         # connect() doesn't send packets with UDP, so this is safe
-        if os.environ['TEST_IP']:
+        if 'TEST_IP' in os.environ:
             s.connect((os.environ['TEST_IP'], 80))
         else:
             s.connect(("8.8.8.8", 80))
