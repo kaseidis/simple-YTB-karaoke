@@ -1,0 +1,21 @@
+body {
+    margin: 0;
+    background-color: black;
+}
+
+img#qr_image {
+    z-index: 10;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100px;
+    height: 100px;
+}
+
+img#next_btn {
+    z-index: 10;
+    position: absolute;
+    right: 0;
+    top: 100px;
+    width: 100px;
+}

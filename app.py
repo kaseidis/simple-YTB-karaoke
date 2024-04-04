@@ -38,17 +38,27 @@ def get_local_ip():
 
 def get_video_title(vid):
     # This function would actually make a request to the YouTube API to get the video title
-    response = requests.get(f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={vid}&key={API_KEY}")
+    response = requests.get(f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={vid}&key={API_KEY}", timeout=10)
     try:
         video_info = response.json()
         return video_info['items'][0]['snippet']['title']
+    except requests.exceptions.Timeout:
+        return "[Timeout] No Title {vid}"
     except:
-        return "No Title Got"
+        return "[Error] No Title {vid}"
 
 
-@app.get("/static/<filepath:re:.*\.png>")
+@app.get("/img/<filepath:re:.*\.png>")
+def png(filepath):
+    return static_file(filepath, root="static/img")
+
+@app.get("/css/<filepath:re:.*\.css>")
 def css(filepath):
-    return static_file(filepath, root="static/")
+    return static_file(filepath, root="static/css")
+
+@app.get("/js/<filepath:re:.*\.js>")
+def js(filepath):
+    return static_file(filepath, root="static/js")
 
 @app.get('/api/client_qr')
 def client_qr_code():
@@ -152,9 +162,11 @@ def delete_item():
         
         with lock:
             global videos
-            videos = [video for video in videos if video['vid'] != vid]
-        
-        return {"message": "Video deleted successfully"}
+            for i, video in enumerate(videos):
+                if video['vid'] == vid:
+                    del videos[i]
+                    return {"message": "Video deleted successfully"}
+        return {"message": "Video not found"}
     except Exception as e:
         response.status = 500
         return {"error": str(e)}
