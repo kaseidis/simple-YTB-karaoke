@@ -1,23 +1,23 @@
-// 2. This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement('script');
-
+// Song to play with empty list
 var empty_item = 'FOIjvHjK0Rw'
 
+// Setup YTB Player
+var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+// Share Varibles
 var next_btn = document.getElementById('next_btn');
 var wait = true
-
-next_btn.addEventListener("click", () => {
-    if (!wait)
-        getNextVid(player);
-})
-
-// 3. This function creates an <iframe> (and YouTube player)
-//    after the API code downloads.
 var player;
+
+// Add Event Listeners
+next_btn.addEventListener("click", onNextClick)
+window.addEventListener("resize",onResize)
+document.addEventListener('keydown', onKeydown);
+
+// Load YTB player
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: window.innerHeight * 0.99,
@@ -32,21 +32,7 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-window.onresize = function (event) {
-    player.setSize(window.innerWidth * 0.99, window.innerHeight * 0.99)
-};
-
-// 4. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    getNextVid(event.target);
-}
-
-
-// 4. The API will call this function when the video player is ready.
-function onPlayerError(event) {
-    event.target.pauseVideo();
-}
-
+// Load next video from API
 function getNextVid(target) {
     const requestOptions = {
         method: "GET",
@@ -76,10 +62,37 @@ function getNextVid(target) {
     });
 }
 
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
-// var done = false;
+// Event Listeners
+
+//Keep video full screen
+function onResize() {
+    player.setSize(window.innerWidth * 0.99, window.innerHeight * 0.99)
+}
+
+// Play next video when press enter
+function onKeydown(event) {
+    if(event.keyCode == 13) {
+        onNextClick();
+    }
+}
+
+// Play next video when click next
+function onNextClick() {
+    if (!wait)
+        getNextVid(player);
+}
+
+// Trying load next video when player ready
+function onPlayerReady(event) {
+    getNextVid(event.target);
+}
+
+// Trying pause video when player got error
+function onPlayerError(event) {
+    event.target.pauseVideo();
+}
+
+// Trying play next video when current end
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
         getNextVid(event.target);

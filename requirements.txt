@@ -1,4 +1,4 @@
 qrcode
 requests
 bottle
-paste
+tornado

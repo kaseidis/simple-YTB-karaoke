@@ -181,4 +181,4 @@ application = default_app()
 # Run the Bottle web server
 if __name__ == '__main__':
     #run(app, host='0.0.0.0', port=PORT, debug=True, reloader=True)
-    run(app, host='0.0.0.0', port=PORT, server='paste')
+    run(app, host='0.0.0.0', port=PORT, server='tornado')
